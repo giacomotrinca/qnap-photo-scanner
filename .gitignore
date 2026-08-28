@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Ambienti / editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Dati generati dallo script (da non versionare)
+organizzazione.log
+report_organizzazione.csv
+stato_organizzazione.json
+
+# Dipendenze
+Pipfile.lock
+poetry.lock
+
+# Niente file temporanei
+*.tmp
