@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qnap-photo-scanner"
-version = "1.0.0"
+version = "1.0.1"
 description = "Organizza foto in struttura Anno/Mese su NAS QNAP, rilevando duplicati (MD5) e foto sfocate (varianza Laplaciano, Pillow+numpy)."
 readme = "README.md"
 requires-python = ">=3.8"

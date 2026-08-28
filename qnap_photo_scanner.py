@@ -30,6 +30,11 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 import logging
 
+# Su QNAP /tmp è una tmpfs piccola e spesso piena: dirigiamo i file temporanei
+# su spazio dati NAS. Questo fallback evita errori di here-doc / write temporanei.
+# Può essere sovrascritto dall'ambiente dell'utente (setdefault non forza).
+os.environ.setdefault("TMPDIR", "/share/CACHEDEV1_DATA/entware/tmp")
+
 # ---------------------------------------------------------------------------
 # Costanti di default (sovrascrivibili da CLI e config)
 # ---------------------------------------------------------------------------

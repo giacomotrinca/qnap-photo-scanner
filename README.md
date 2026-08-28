@@ -154,6 +154,30 @@ Issue e pull request sono benvenuti. Prima di intervenire su grandi modifiche, a
 
 ---
 
+## Note di progetto / changelog
+
+### v1.0.1 — Fix riorganizzazione doppia + TMPDIR (agosto 2026)
+
+Questa versione risolve un piccolo bug ereditato dallo script originale usato sul NAS QNAP e ripristina un'impostazione di ambiente fondamentale per quel dispositivo.
+
+**Bug corretto — elaborazione doppia dei file:**
+
+Nella versione originale, in `processa_lista_file()` le tre fasi (duplicati → sfocate → riorganizzazione) iteravano ognuna sull'intera `file_list`. Una foto **sfocata**, una volta spostata in quarantena nella fase 2, **non veniva esclusa** dalla fase 3 di riorganizzazione: la fase 3 ritentava quindi `shutil.move` su un file che non esisteva più sul disco.
+
+In **dry-run** questo generava log duplicati e voci `[SPOSTATO]` spure; in **modalità reale** era innocuo ai fini dei dati (il file non veniva perso né danneggiato, solo loggato un `Errore spostamento`), ma l'output risultava sporco e poco affidabile come report.
+
+Fix implementato: ogni fase opera ora solo sui **residui** (file non ancora spostati e ancora presenti sul disco), tenendo traccia dei file già mossi (`moved`). Il risultato è un report pulito e senza voci spurie.
+
+**Ripristino `TMPDIR`:**
+
+Durante il refactoring era andata persa l'impostazione
+```python
+os.environ.setdefault("TMPDIR", "/share/CACHEDEV1_DATA/entware/tmp")
+```
+sul NAS QNAP `/tmp` è una **tmpfs da ~64MB, spesso piena**: senza questo fallback i file temporanei (e gli here-doc) possono fallire. È stato reinserito come `setdefault` (l'ambiente dell'utente può comunque sovrascriverlo).
+
+---
+
 ## Licenza
 
 MIT © 2026 Giacomo Trinca Cintioli — vedi [LICENSE](LICENSE).
